@@ -34,7 +34,7 @@ namespace WebApplication1.Pages
             using (IDbConnection connection = new SqlConnection(_configuration.GetConnectionString("ConnectionString")))
             {
                 var sql = "INSERT INTO sleep(dateStart, dateEnd) VALUES(@DateStart, @DateEnd)";
-                connection.Execute(sql, new { DateStart = Sleep.DateStart, Dateend = Sleep.DateEnd});
+                connection.Execute(sql, new { Sleep.DateStart, Sleep.DateEnd});
             }
 
             return RedirectToPage("./Index");
