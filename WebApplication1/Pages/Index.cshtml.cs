@@ -13,7 +13,7 @@ namespace WebApplication1.Pages
     {
         private readonly IConfiguration _configuration;
 
-        public IEnumerable<Sleep> Records { get; set; }
+        public List<SleepToShow> Records { get; set; }
 
         public IndexModel(IConfiguration configuration)
         {
@@ -22,16 +22,37 @@ namespace WebApplication1.Pages
 
         public void OnGet()
         {
-            Records = GetAllRecords();
+            var recordsFromDb = GetAllRecords();
+            var mappedRecords = new List<SleepToShow>();
+
+            foreach (var recordFromDb in recordsFromDb)
+            {
+                var duration = new TimeSpan(recordFromDb.Duration);
+
+                mappedRecords.Add(new SleepToShow
+                {
+                    Id = recordFromDb.Id,
+                    DateStart = recordFromDb.DateStart,
+                    DateEnd = recordFromDb.DateEnd,
+                    Duration = duration
+                });
+            }
+
+            Records = mappedRecords;
         }
 
-        private IEnumerable<Sleep> GetAllRecords()
+        private List<Sleep> GetAllRecords()
         {
             using (IDbConnection connection = new SqlConnection(_configuration.GetConnectionString("ConnectionString")))
             {
-                var allSleeps = connection.Query<Sleep>("SELECT * FROM Sleep");
+                var query = @"SELECT 
+                                  Id, DateStart, DateEnd, 
+                                  DATEDIFF_BIG(ms, DateStart, DateEnd) AS 'Duration'
+                              FROM Sleep";
 
-                return allSleeps;
+                var allSleeps = connection.Query<Sleep>(query);
+
+                return allSleeps.ToList();
             }
 
         }
