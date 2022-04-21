@@ -1,5 +1,6 @@
 using System.Data;
 using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
@@ -7,6 +8,7 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Pages
 {
+    [Authorize]
     public class CreateSleepModel : PageModel
     {
         private readonly IConfiguration _configuration;
