@@ -26,6 +26,10 @@ namespace WebApplication1.Pages
 
         public IActionResult OnPost()
         {
+            if (Sleep.DateEnd < Sleep.DateStart)
+            {
+                ModelState.AddModelError("Operation Invalid", "Start date can't be later than end date.");
+            }
             if (!ModelState.IsValid)
             {
                 return Page();

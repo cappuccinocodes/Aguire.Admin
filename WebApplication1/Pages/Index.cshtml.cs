@@ -27,7 +27,7 @@ namespace WebApplication1.Pages
 
             foreach (var recordFromDb in recordsFromDb)
             {
-                var duration = new TimeSpan(recordFromDb.Duration);
+                var duration = GetDuration(recordFromDb.DateStart, recordFromDb.DateEnd);
 
                 mappedRecords.Add(new SleepToShow
                 {
@@ -41,14 +41,17 @@ namespace WebApplication1.Pages
             Records = mappedRecords;
         }
 
+        private string GetDuration(DateTime dateStart, DateTime dateEnd)
+        {
+            return (dateEnd - dateStart).ToString();
+        }
+
         private List<Sleep> GetAllRecords()
         {
             using (IDbConnection connection = new SqlConnection(_configuration.GetConnectionString("ConnectionString")))
             {
-                var query = @"SELECT 
-                                  Id, DateStart, DateEnd, 
-                                  DATEDIFF_BIG(ms, DateStart, DateEnd) AS 'Duration'
-                              FROM Sleep";
+                var query = @"SELECT * FROM Sleep";
+                                  
 
                 var allSleeps = connection.Query<Sleep>(query);
 
