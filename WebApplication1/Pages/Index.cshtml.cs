@@ -1,8 +1,5 @@
 ﻿using System.Data;
-using System.Globalization;
-using System.Linq;
 using Dapper;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using WebApplication1.Models;

@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using WebApplication1.Data;
 var builder = WebApplication.CreateBuilder(args);
@@ -28,8 +28,9 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
-app.MapRazorPages();
-app.UseAuthentication();;
+app.UseAuthentication(); ;
 app.UseAuthorization();
+
+app.MapRazorPages();
 
 app.Run();
