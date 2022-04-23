@@ -19,8 +19,6 @@ namespace WebApplication1.Areas.Budget.Pages
 
         public void OnGet()
         {
-     
-
             Transactions = GetAllTransactions();
         }
 

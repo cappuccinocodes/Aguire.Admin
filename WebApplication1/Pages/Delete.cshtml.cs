@@ -7,7 +7,8 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Pages
 {
-	public class DeleteModel : PageModel
+    [Authorize]
+    public class DeleteModel : PageModel
     {
         private readonly IConfiguration _configuration;
 
