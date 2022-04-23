@@ -27,7 +27,7 @@ namespace WebApplication1.Areas.Budget.Pages
             using (IDbConnection connection = new SqlConnection(_configuration.GetConnectionString("ConnectionString")))
             {
                 var query =
-                    @"SELECT t.Amount, t.CategoryId, t.[Date], t.Id, t.TransactionType as Type, t.Name, c.Name AS Category
+                    @"SELECT t.Amount, t.CategoryId, t.[Date], t.Id, t.TransactionType, t.Name, c.Name AS Category
                       FROM Transactions t
                       LEFT JOIN BudgetCategory c
                       ON t.CategoryId = c.Id";

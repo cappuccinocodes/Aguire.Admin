@@ -1,5 +1,6 @@
 ﻿using System.Data;
 using Dapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
@@ -7,7 +8,8 @@ using WebApplication1.Models;
 
 namespace WebApplication1.Areas.Budget.Pages
 {
-	public class DeleteTransactionModel : PageModel
+    [Authorize]
+    public class DeleteTransactionModel : PageModel
     {
         private readonly IConfiguration _configuration;
 
@@ -32,15 +34,15 @@ namespace WebApplication1.Areas.Budget.Pages
             using (IDbConnection connection = new SqlConnection(_configuration.GetConnectionString("ConnectionString")))
             {
                 var query =
-                    @"SELECT t.Amount, t.CategoryId, t.[Date], t.Id, t.TransactionType as Type, t.Name, c.Name AS Category
+                    @"SELECT t.Amount, t.CategoryId, t.[Date], t.Id, t.TransactionType, t.Name, c.Name AS Category
                       FROM Transactions t
-                      LEFT JOIN BudgetCategory c
+                      JOIN BudgetCategory c
                       ON t.CategoryId = c.Id
                       AND t.Id = @Id";
 
-                var sleep = connection.QuerySingle<TransactionItem>(query, new { id });
+                var transaction = connection.QuerySingle<TransactionItem>(query, new { id });
 
-                return sleep;
+                return transaction;
             }
         }
 

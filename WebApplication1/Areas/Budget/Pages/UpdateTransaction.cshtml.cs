@@ -10,7 +10,7 @@ using WebApplication1.Models;
 namespace WebApplication1.Areas.Budget.Pages
 {
     [Authorize]
-    public class CreateTransactionModel : PageModel
+	public class UpdateTransactionModel : PageModel
     {
         private readonly IConfiguration _configuration;
 
@@ -20,15 +20,16 @@ namespace WebApplication1.Areas.Budget.Pages
         public IEnumerable<BudgetCategory> Categories { get; set; }
 
         [BindProperty]
-        public Transaction Transaction { get; set; }
+        public TransactionItem Transaction { get; set; }
 
-        public CreateTransactionModel(IConfiguration configuration)
+        public UpdateTransactionModel(IConfiguration configuration)
         {
             _configuration = configuration;
         }
 
-        public IActionResult OnGet()
+        public IActionResult OnGet(int id)
         {
+            Transaction = GetById(id);
             Categories = GetCategories();
             CategorySL = new SelectList(Categories, "Id", "Name");
             return Page();
@@ -40,16 +41,40 @@ namespace WebApplication1.Areas.Budget.Pages
             {
                 var query = @"SELECT * FROM BudgetCategory";
 
-
                 var allTransactions = connection.Query<BudgetCategory>(query);
 
                 return allTransactions;
             }
         }
 
+        private TransactionItem GetById(int id)
+        {
+            try
+            {
+                using (IDbConnection connection = new SqlConnection(_configuration.GetConnectionString("ConnectionString")))
+                {
+                    var query =
+                        @"SELECT t.Amount, t.CategoryId, t.[Date], t.Id, t.TransactionType, t.Name, c.Name AS Category
+                      FROM Transactions t
+                      JOIN BudgetCategory c
+                      ON t.CategoryId = c.Id
+                      AND t.Id = @Id";
+
+                    var transaction = connection.QuerySingle<TransactionItem>(query, new { id });
+
+                    return transaction;
+                }
+            }
+            catch (Exception ex)
+            {
+                var msg = ex.Message;
+            }
+            return new TransactionItem { };
+        }
+
         public IActionResult OnPost()
         {
-     
+          
             if (!ModelState.IsValid)
             {
                 return Page();
@@ -59,14 +84,14 @@ namespace WebApplication1.Areas.Budget.Pages
             {
                 using (IDbConnection connection = new SqlConnection(_configuration.GetConnectionString("ConnectionString")))
                 {
-                    var sql = "INSERT INTO Transactions(Amount, Date, Name, CategoryId, TransactionType) VALUES(@Amount, @Date, @Name, @CategoryId, @TransactionType)";
-                    connection.Execute(sql, new { Transaction.Amount, Transaction.Date, Transaction.Name, Transaction.CategoryId, Transaction.TransactionType });
+                    var sql = "UPDATE Transactions SET Date = @Date, Amount = @Amount, Name = @Name, CategoryId = @CategoryId, TransactionType = @TransactionType WHERE Id = @Id";
+                    connection.Execute(sql, new { Transaction.Date, Transaction.Amount, Transaction.Name, Transaction.CategoryId, Transaction.TransactionType, Transaction.Id });
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 // do something;
             }
-           
 
             return RedirectToPage("/TransactionList", new { area = "Budget" });
         }

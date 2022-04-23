@@ -58,7 +58,7 @@ namespace WebApplication1.Pages
                 connection.Execute(sql, new { Sleep.DateStart, Sleep.DateEnd, Sleep.Id });
             }
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("/TransactionList", new { area = "Budget" });
         }
     }
 }

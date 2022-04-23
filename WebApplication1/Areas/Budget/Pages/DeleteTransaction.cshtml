@@ -32,10 +32,10 @@
             @Html.DisplayFor(model => model.Transaction.Category)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Transaction.Type)
+            @Html.DisplayNameFor(model => model.Transaction.TransactionType)
         </dt>
         <dd class="col-sm-10">
-            @Model.Transaction.Type.ToDescription()
+            @Model.Transaction.TransactionType.ToDescription()
         </dd>
     </dl>
 

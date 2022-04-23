@@ -1,11 +1,9 @@
 ﻿@page
-@model WebApplication1.Areas.Budget.Pages.CreateTransactionModel
-@using WebApplication1.Models;
-
+@model WebApplication1.Areas.Budget.Pages.UpdateTransactionModel
 @{
 }
 
-<h4>Add Transaction</h4>
+<h4>Update Transaction</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,6 +12,7 @@
                 <span>Please correct the following errors</span>
             </div>
 
+            <input type="hidden" asp-for="Transaction.Id" />
             <div class="form-group">
                 <label asp-for="Transaction.Date" class="control-label"></label>
                 <input asp-for="Transaction.Date" class="form-control" />
@@ -38,6 +37,7 @@
                 <label asp-for="Transaction.CategoryId" class="control-label"></label>
                 <select asp-for="Transaction.CategoryId" asp-items="Model.CategorySL" class="form-control"></select>
                 <span asp-validation-for="Transaction.CategoryId" class="text-danger"></span>
+                <input type="hidden" asp-for="Transaction.Category" class="form-control" value="fake" />
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-success" />
@@ -49,3 +49,4 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
