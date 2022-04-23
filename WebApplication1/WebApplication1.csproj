@@ -21,4 +21,15 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Areas\Budget\" />
+    <None Remove="Areas\Budget\Pages\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Areas\Budget\" />
+    <Folder Include="Areas\Budget\Pages\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="Pages\Indedx.cshtml" />
+  </ItemGroup>
 </Project>
